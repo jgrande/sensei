@@ -144,6 +144,13 @@ public class SenseiBroker extends AbstractConsistentHashBroker<SenseiRequest, Se
   public SenseiResult mergeResults(SenseiRequest request, List<SenseiResult> resultList)
   {
     SenseiResult res = ResultMerger.merge(request, resultList, false);
+
+    if (logger.isDebugEnabled()) {
+        logger.debug("Merge completed");
+        for (SenseiResult result : resultList) {
+            logger.debug("Individual node query took : " + result.getTime());
+        }
+    }
     
     if (request.isFetchStoredFields() || request.isFetchStoredValue())
       recoverSrcData(res, res.getSenseiHits(), request.isFetchStoredFields());

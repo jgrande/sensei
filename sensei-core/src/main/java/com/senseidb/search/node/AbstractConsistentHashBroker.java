@@ -245,8 +245,10 @@ public abstract class AbstractConsistentHashBroker<REQUEST extends AbstractSense
           public REQUEST apply(Node node, Set<Integer> nodePartitions) {
             // TODO: Cloning is yucky per http://www.artima.com/intv/bloch13.html
             REQUEST clone = (REQUEST) (((SenseiRequest) req).clone());
-            
             clone.setPartitions(nodePartitions);
+            if (logger.isDebugEnabled()) {
+                logger.debug("Sending individual node request to id:" + node.getId() + " url:" + node.getUrl() + " partitions:" + nodePartitions);
+            }
 
             REQUEST customizedRequest = customizeRequest(clone);
             return customizedRequest;
